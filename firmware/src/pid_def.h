@@ -3,7 +3,7 @@
 
 #define TWO_DIRECTIONAL
 #define STEP_DIR
-#define UART_COMM
+//#define UART_COMM
 //#define USB_COMM
 
 #define APB2_CLK					72000000

@@ -72,7 +72,7 @@ FLAGS		+= -ffunction-sections -fdata-sections -ffreestanding
 FLAGS		+= -fno-move-loop-invariants -Wall -Wextra
 
 # C compiler flags
-CFLAGS		:= $(FLAGS) -D$(CPU) -DHSE_VALUE=$(HSE_VALUE) -D$(BOARD)
+CFLAGS		:= $(FLAGS) -D$(CPU) -DHSE_VALUE=$(HSE_VALUE) -D$(BOARD) -DUSB_COMM
 
 # Linker flags
 LDFLAGS		:= $(FLAGS)
