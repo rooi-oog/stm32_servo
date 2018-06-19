@@ -1,0 +1,12 @@
+[submodule "firmware/libopencm3"]
+	path = firmware/libopencm3
+	url = https://github.com/libopencm3/libopencm3.git
+[submodule "firmware/src/stm32_usb"]
+	path = firmware/src/stm32_usb
+	url = https://github.com/rooi-oog/stm32_usb.git
+[submodule "firmware/src/pid"]
+	path = firmware/src/pid
+	url = https://github.com/rooi-oog/pid.git
+[submodule "gpid_tune/kplot"]
+	path = gpid_tune/kplot
+	url = https://github.com/kristapsdz/kplot.git
