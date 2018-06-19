@@ -106,11 +106,11 @@ bin: $(TARGET)
 	
 # Upload firmware to MCU	
 pgm: $(TARGET)
-	openocd -f $(OOCD_IF).cfg -c "source [find target/$(cpu)x.cfg]" -c "program $(TARGET_DIR)/$(TARGET) verify reset exit"
+	openocd -f oocd/$(OOCD_IF).cfg -c "source [find target/$(cpu)x.cfg]" -c "program $(TARGET_DIR)/$(TARGET) verify reset exit"
 	
 # Start OpenOCD server	
 debug: $(TARGET)
-	openocd -f $(OOCD_IF).cfg -c "source [find target/$(cpu)x.cfg]"
+	openocd -f oocd/$(OOCD_IF).cfg -c "source [find target/$(cpu)x.cfg]"
 		
 	
 $(TARGET): $(OBJS)
