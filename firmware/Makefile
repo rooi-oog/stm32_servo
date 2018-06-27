@@ -1,5 +1,5 @@
 # ------------------------------------------------------------------------------------------- #
-# Board
+# Boards
 
 # ST NUCLEO F401RE board
 #BOARD		:= NUCLEO_F401RE
@@ -8,7 +8,7 @@
 
 # STM32F4-Discovery board
 #BOARD		:= STM32F4_DISCOVERY
-#FPU			:= hard
+#FPU		:= hard
 #HSE_VALUE	:= 8000000
 
 # Famous Blue pill STM32F103C8 board
@@ -16,11 +16,22 @@ BOARD		:= STM32F1_BLUEPILL
 FPU			:= 
 HSE_VALUE	:= 8000000
 
+# On-motor STM32F103C8 board
+#BOARD		:= STM32F1_ONMOTOR
+#FPU		:= 
+#HSE_VALUE	:= 0
+
 # ------------------------------------------------------------------------------------------- #
 # MCU
 
 # ------------------------------------------------------ #
 ifeq ($(BOARD),STM32F1_BLUEPILL)
+CPU			:= STM32F1
+MCPU		:= -mcpu=cortex-m3 -mfloat-abi=soft
+LDSCRIPT	:= -T "stm32f103x8.ld"
+OOCD_IF		?= cmsis_dap
+# ------------------------------------------------------ #
+else ifeq ($(BOARD),STM32F1_ONMOTOR)
 CPU			:= STM32F1
 MCPU		:= -mcpu=cortex-m3 -mfloat-abi=soft
 LDSCRIPT	:= -T "stm32f103x8.ld"
@@ -64,7 +75,7 @@ OPENCM3_DIR	:= libopencm3
 OBJS		+= $(patsubst %.c, %.o, $(shell find -L src -type f -name "*.c"))
 
 # Optimization / debug flags
-OPT			:= -O0 -g3 #-Og -g3
+OPT			:= -O3 -g3
 
 # Common C and Linker flags
 FLAGS		:= $(MCPU) $(OPT) -mthumb -fmessage-length=0 -fsigned-char 
@@ -72,7 +83,7 @@ FLAGS		+= -ffunction-sections -fdata-sections -ffreestanding
 FLAGS		+= -fno-move-loop-invariants -Wall -Wextra
 
 # C compiler flags
-CFLAGS		:= $(FLAGS) -D$(CPU) -DHSE_VALUE=$(HSE_VALUE) -D$(BOARD) -DUSB_COMM
+CFLAGS		:= $(FLAGS) -D$(CPU) -DHSE_VALUE=$(HSE_VALUE) -D$(BOARD)
 
 # Linker flags
 LDFLAGS		:= $(FLAGS)

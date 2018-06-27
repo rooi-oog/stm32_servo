@@ -7,8 +7,8 @@
 #include <libopencm3/stm32/exti.h>
 #include <libopencm3/stm32/timer.h>
 
+#include "config.h"
 #include "eeprom.h"
-#include "pid_def.h"
 #include "pid/pid.h"
 
 #include "main.h"
@@ -74,7 +74,7 @@ void sys_tick_handler (void)
 	
 	/* Calculate PID */
 	pid_update (&pid [0], resampler == 0);
-/*	pid_update (&pid [1], resampler == 0);*/
+	pid_update (&pid [1], resampler == 0);
 	
 	/* Velocity sampling signal occurs every nth tick */
 	resampler = (resampler + 1) & 15;
@@ -127,7 +127,7 @@ void message_handler ()
 		
 		/* Set sub-command (PWM, TORQUE, VELOCITY) */
 		case 'C':
-			pid_set_sub_cmd (pid, atoi (&cmd [1]));
+			pid_set_subcmd (pid, atoi (&cmd [1]));
 			feedback_buf_index = 0;
 			break;
 		
@@ -160,13 +160,14 @@ void main (void)
 	/* Periferies initialization */
 	clock_setup ();
 	gpio_setup ();
+	encoders_setup ();
+	pwm_setup ();
+	
 #ifdef USB_COMM	
 	usb_setup ();
 #else
 	uart_setup ();
 #endif
-	encoders_setup ();
-	pwm_setup ();
 	
 	pid_setup (&pid [0], &pid_eeprom [0], POSITION, PWM_MAX_VAL, (uint32_t *) &PWM1_P, (uint32_t *) &PWM1_N, (uint32_t *) &ENCODER_0);
 	pid_setup (&pid [1], &pid_eeprom [0], POSITION, PWM_MAX_VAL, (uint32_t *) &PWM2_P, (uint32_t *) &PWM2_N, (uint32_t *) &ENCODER_1);
@@ -174,11 +175,10 @@ void main (void)
 	/* Start servo cycle */
 	systick_setup ();
 
-	/* Unblocking flash memory for write by software */
+	/* Unblocking flash memory for being writable by software */
 	FLASH_KEYR = 0x45670123;
 	FLASH_KEYR = 0xCDEF89AB;
 	
-	while (1) {		
+	while (1)		
 		message_handler ();
-	}
 }

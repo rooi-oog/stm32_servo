@@ -7,12 +7,15 @@
 #include <libopencm3/cm3/nvic.h>
 
 #include "stm32_usb/usb.h"
-#include "pid_def.h"
+#include "config.h"
 
 void clock_setup (void)
 {
-	//rcc_clock_setup_in_hse_8mhz_out_72mhz ();	
+#if (HSE_VALUE == 8000000)
+	rcc_clock_setup_in_hse_8mhz_out_72mhz ();
+#else
 	rcc_clock_setup_in_hsi_out_64mhz ();
+#endif
 	rcc_periph_clock_enable (RCC_GPIOC);
 	rcc_periph_clock_enable (RCC_GPIOA);
 	rcc_periph_clock_enable (RCC_GPIOB);
@@ -32,7 +35,7 @@ void uart_setup ()
 	nvic_enable_irq (NVIC_USART2_IRQ);						// USART2 interrupt enable	
 	
 	/* Setup UART parameters. */
-	usart_set_baudrate (USART2, 230400);
+	usart_set_baudrate (USART2, 115200);
 	usart_set_databits (USART2, 8);
 	usart_set_stopbits (USART2, USART_STOPBITS_1);
 	usart_set_parity (USART2, USART_PARITY_NONE);
@@ -52,7 +55,8 @@ void gpio_setup (void)
 	/* USART2 pins */
 	gpio_set_mode (GPIOA, GPIO_MODE_OUTPUT_2_MHZ, GPIO_CNF_OUTPUT_ALTFN_PUSHPULL, GPIO2);
 	gpio_set_mode (GPIOA, GPIO_MODE_INPUT, GPIO_CNF_INPUT_FLOAT, GPIO3);	
-#endif	
+#endif
+
 	/* Velocity sensor input */
 	gpio_set_mode (GPIOA, GPIO_MODE_INPUT, GPIO_CNF_INPUT_FLOAT, GPIO0 | GPIO1);
 		
@@ -73,7 +77,7 @@ void gpio_setup (void)
 	exti_enable_request (STEP_0_PIN | STEP_1_PIN);
     exti_set_trigger (STEP_0_PIN | STEP_1_PIN, EXTI_TRIGGER_RISING);
     exti_select_source (STEP_0_PIN | STEP_1_PIN, GPIOB);
-	nvic_enable_irq (NVIC_EXTI0_IRQ);
+	nvic_enable_irq (NVIC_EXTI15_10_IRQ);
 		
 #else /* Speed adjusting buttons */	
 	gpio_set_mode (GPIOA, GPIO_MODE_INPUT, GPIO_CNF_INPUT_PULL_UPDOWN, ALL_SPEED_STOP);
@@ -137,9 +141,9 @@ void systick_setup (void)
 	/* 72MHz / 8 => 9000000 counts per second */
 	systick_set_clocksource (STK_CSR_CLKSOURCE_AHB_DIV8);
 
-	/* 9000000/9000 = 1000 overflows per second - every 1ms one interrupt */
+	/* 1000 overflows per second - every 1ms one interrupt */
 	/* SysTick interrupt every N clock pulses: set reload to N-1 */
-	systick_set_reload (8999);
+	systick_set_reload (rcc_ahb_frequency / 8 / 1000 - 1);
 
 	systick_interrupt_enable ();
 

@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <errno.h>
 #include <libopencm3/stm32/usart.h>
+#include "config.h"
 #include "uart.h"
 
 static char rx_buf [UART_RINGBUFFER_SIZE_RX];
