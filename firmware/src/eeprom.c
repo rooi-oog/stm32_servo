@@ -7,9 +7,10 @@ static void flash_write (unsigned char*, unsigned int, unsigned int);
 
 // MUST be 32 cells as it takes full flash page (1Kb)
 __attribute__ ((section(".eeprom"), used)) const arm_pid_gains_t pid_eeprom [32] =
-{{160, 98304, 53084, 1835, 222822, 0, 0}, 	// Ordinary DC motor on 3-5A
- { 0, 65535, 40000, 800, 60000, 0, 0 },		// One direction speed control with half-bridge
- {0, 0, 0, 0, 0, 0, 0}, {0, 0, 0, 0, 0, 0, 0}, 
+{{650, 262144, 108134, 14745, 255590, 190054, 0},	// 12v Printer DC printer 2.5A
+ {160, 98304, 53084, 1835, 222822, 0, 0}, 			// Ordinary DC motor on 3-5A
+ { 0, 65535, 40000, 800, 60000, 0, 0 },				// Single direction speed control with mosfet
+ {0, 0, 0, 0, 0, 0, 0}, 
  {0, 0, 0, 0, 0, 0, 0}, {0, 0, 0, 0, 0, 0, 0}, {0, 0, 0, 0, 0, 0, 0}, {0, 0, 0, 0, 0, 0, 0}, 
  {0, 0, 0, 0, 0, 0, 0}, {0, 0, 0, 0, 0, 0, 0}, {0, 0, 0, 0, 0, 0, 0}, {0, 0, 0, 0, 0, 0, 0}, 
  {0, 0, 0, 0, 0, 0, 0}, {0, 0, 0, 0, 0, 0, 0}, {0, 0, 0, 0, 0, 0, 0}, {0, 0, 0, 0, 0, 0, 0}, 
