@@ -29,7 +29,7 @@ ifeq ($(BOARD),STM32F1_BLUEPILL)
 CPU			:= STM32F1
 MCPU		:= -mcpu=cortex-m3 -mfloat-abi=soft
 LDSCRIPT	:= -T "stm32f103x8.ld"
-OOCD_IF		?= cmsis_dap
+OOCD_IF		?= stlink_v2
 # ------------------------------------------------------ #
 else ifeq ($(BOARD),STM32F1_ONMOTOR)
 CPU			:= STM32F1

@@ -77,7 +77,7 @@ void sys_tick_handler (void)
 	pid_update (&pid [1], resampler == 0);
 	
 	/* Velocity sampling signal occurs every nth tick */
-	resampler = (resampler + 1) & 15;
+	resampler = (resampler + 1) & 3;
 	
 	time++;
 }

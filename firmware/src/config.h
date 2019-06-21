@@ -3,8 +3,8 @@
 
 #define BIDIRECTIONAL
 #define STEP_DIR
-#define UART_COMM
-//#define USB_COMM
+//#define UART_COMM
+#define USB_COMM
 
 #define APB2_CLK					rcc_ahb_frequency
 #define APB1_CLK					rcc_apb1_frequency
